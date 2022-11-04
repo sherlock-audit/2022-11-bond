@@ -15,13 +15,15 @@
 
 # On-chain context
 
-TO FILL IN BY PROTOCOL
+## Deployments
+The Bonds system will initially be deployed on Ethereum Mainnet with the goal of deploying to L2s (Optimism & Arbitrum) as well as some other L1 EVM chains (such as Polygon PoS) shortly thereafter.
 
-```
-DEPLOYMENT: [e.g. mainnet, arbitrum, optimism, ..]
-ERC20: [e.g. any, none, USDC, USDC and USDT]
-ERC721: [e.g. any, none, UNI-V3]
-```
+## Tokens Supported
+- ERC20s: The system is designed to be permissionless in that it tries to support market creation for most ERC20 tokens. However, tokens with fee-on-transfer and rebasing logic are not supported.
+
+- ERC1155: Not supported by bond markets.
+
+- ERC721: Not supported by bond markets.
 
 # Audit scope
 
@@ -78,7 +80,7 @@ Compile the contracts with `forge build`.
 
 Run the full test suite with `forge test`.
 
-Fuzz tests have been written to cover a range of market situations. Default number of runs is 4096, although there are 2^33 possible param combinations.
+Fuzz tests have been written to cover a range of market situations. Default number of runs is 4096, although there are 2^33 possible param combinations for a number of the test functions.
 
-The test suite can take awhile to run, specifically the `BondDebt.t.sol` file. To run the test suite without this file: `forge test --no-match-contract BondDebtTest`
+The test suite can take awhile to run, specifically the `BondDebt.t.sol` file. To run the test suite without this file: `forge test --no-match-contract BondDebtTest`. Alternatively, you can reduce the number of fuzz runs in `foundry.toml`.
 
