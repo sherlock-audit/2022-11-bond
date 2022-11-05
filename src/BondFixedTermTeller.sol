@@ -99,6 +99,9 @@ contract BondFixedTermTeller is BondBaseTeller, IBondFixedTermTeller, ERC1155 {
         uint48 expiry_,
         uint256 amount_
     ) external override nonReentrant returns (uint256, uint256) {
+        // Revert if expiry is in the past
+        if (expiry_ < block.timestamp) revert Teller_InvalidParams();
+
         uint256 tokenId = getTokenId(underlying_, expiry_);
 
         // Revert if no token exists, must call deploy first

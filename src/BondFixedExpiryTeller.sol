@@ -98,6 +98,9 @@ contract BondFixedExpiryTeller is BondBaseTeller, IBondFixedExpiryTeller {
         uint48 expiry_,
         uint256 amount_
     ) external override nonReentrant returns (ERC20BondToken, uint256) {
+        // Revert if expiry is in the past
+        if (expiry_ < block.timestamp) revert Teller_InvalidParams();
+
         ERC20BondToken bondToken = bondTokens[underlying_][expiry_];
 
         // Revert if no token exists, must call deploy first
