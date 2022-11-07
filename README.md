@@ -9,23 +9,78 @@
 
 # Resources
 
-- [Website](https://bondprotocol.finance/)
+- [Docs](https://docs.bondprotocol.finance/)
+- [SDAM Paper](https://github.com/Bond-Protocol/research/blob/master/papers/Sequential_Dutch_Auction_Markets.pdf) (note: the implementation section is not up to date with the latest code, but the math section should be accurate).
 - [Twitter](https://twitter.com/bond_protocol)
 
 # On-chain context
 
-TO FILL IN BY PROTOCOL
+## Deployments
+The Bonds system will initially be deployed on Ethereum Mainnet with the goal of deploying to L2s (Optimism & Arbitrum) as well as some other L1 EVM chains (such as Polygon PoS) shortly thereafter.
 
-```
-DEPLOYMENT: [e.g. mainnet, arbitrum, optimism, ..]
-ERC20: [e.g. any, none, USDC, USDC and USDT]
-ERC721: [e.g. any, none, UNI-V3]
-```
+## Tokens Supported
+- ERC20s: The system is designed to be permissionless in that it tries to support market creation for most ERC20 tokens. However, tokens with fee-on-transfer and rebasing logic are not supported.
+
+- ERC1155: Not supported by bond markets.
+
+- ERC721: Not supported by bond markets.
 
 # Audit scope
 
-TBD
+The following contracts in this repository are in scope:
+- bases
+    - BondBaseCallback.sol
+    - BondBaseSDA.sol
+    - BondBaseTeller.sol
+- interfaces
+    - IBondAggregator.sol
+    - IBondAuctioneer.sol
+    - IBondCallback.sol
+    - IBondFixedExpiryTeller.sol
+    - IBondFixedTermTeller.sol
+    - IBondSDA.sol
+    - IBondTeller.sol
+- BondAggregator.sol
+- BondFixedExpirySDA.sol
+- BondFixedExpiryTeller.sol
+- BondFixedTermSDA.sol
+- BondFixedTermTeller.sol
+- BondSampleCallback.sol
+- ERC20BondToken.sol
 
 # About Bond Protocol
 
-TBD
+Bond Protocol is a permissionless system to create Olympus-style bond markets for any token pair. The markets do not require maintenance and will manage bond prices based on activity. Bond issuers create BondMarkets that pay out a Payout Token in exchange for deposited Quote Tokens. Users can purchase future-dated Payout Tokens with Quote Tokens at the current market price and receive Bond Tokens to represent their position while their bond vests. Once the Bond Tokens vest, they can redeem it for the Quote Tokens.
+
+The Bond system is designed to be extensible where additional Auctioneers (with different pricing algorithms) or Tellers (with different payout mechanics) can be built and incorporated into the existing design.
+
+# Getting Started
+
+This repository uses Foundry as its development and testing environment. You must first [install Foundry](https://getfoundry.sh/) to build the contracts and run the test suite.
+
+## Clone the repository into a local directory
+
+```sh
+$ mkdir bonds
+$ git clone https://github.com/sherlock-audit/2022-11-bond.git ./bonds
+```
+
+## Install dependencies
+
+```sh
+$ cd bonds
+$ forge build # installs git submodule dependencies when contracts are compiled
+```
+
+## Build
+
+Compile the contracts with `forge build`.
+
+## Tests
+
+Run the full test suite with `forge test`.
+
+Fuzz tests have been written to cover a range of market situations. Default number of runs is 4096, although there are 2^33 possible param combinations for a number of the test functions.
+
+The test suite can take awhile to run, specifically the `BondDebt.t.sol` file. To run the test suite without this file: `forge test --no-match-contract BondDebtTest`. Alternatively, you can reduce the number of fuzz runs in `foundry.toml`.
+
